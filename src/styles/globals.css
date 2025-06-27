@@ -1,0 +1,120 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Import accessibility fonts */
+@import url('https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&display=swap');
+
+/* Accessibility font faces */
+@font-face {
+  font-family: 'OpenDyslexic';
+  src: url('https://cdn.jsdelivr.net/npm/opendyslexic@1.0.3/fonts/OpenDyslexic-Regular.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+}
+
+/* Base styles */
+body {
+  font-family: theme('fontFamily.lexend');
+  transition: font-size 0.2s ease, background-color 0.2s ease;
+}
+
+/* High contrast mode */
+.high-contrast {
+  --tw-bg-white: #000000;
+  --tw-text-gray-900: #ffffff;
+  --tw-text-gray-700: #ffffff;
+  --tw-text-gray-600: #cccccc;
+  --tw-border-gray-200: #ffffff;
+}
+
+.high-contrast * {
+  background-color: black !important;
+  color: white !important;
+  border-color: white !important;
+}
+
+.high-contrast button, .high-contrast input, .high-contrast select {
+  background-color: #333333 !important;
+  color: white !important;
+  border: 2px solid white !important;
+}
+
+/* Reduced motion */
+.reduce-motion *,
+.reduce-motion *::before,
+.reduce-motion *::after {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+}
+
+/* Focus mode - reduce distractions */
+.focus-mode {
+  --tw-bg-gray-50: #f8f9fa;
+}
+
+.focus-mode .bg-electric-50,
+.focus-mode .bg-blue-50,
+.focus-mode .bg-amber-50 {
+  background-color: var(--tw-bg-gray-50) !important;
+}
+
+/* Font family classes */
+.font-lexend {
+  font-family: 'Lexend', Inter, system-ui, sans-serif;
+}
+
+.font-opendyslexic {
+  font-family: 'OpenDyslexic', monospace;
+}
+
+.font-dyslexie {
+  font-family: 'Dyslexie', system-ui, sans-serif;
+}
+
+.font-atkinson {
+  font-family: 'Atkinson Hyperlegible', system-ui, sans-serif;
+}
+
+/* Custom scrollbar for better accessibility */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/* Focus indicators */
+*:focus {
+  outline: 2px solid theme('colors.electric.500') !important;
+  outline-offset: 2px !important;
+}
+
+/* Skip link for keyboard users */
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 6px;
+  background: theme('colors.electric.600');
+  color: white;
+  padding: 8px;
+  text-decoration: none;
+  border-radius: 4px;
+  z-index: 1000;
+}
+
+.skip-link:focus {
+  top: 6px;
+}
