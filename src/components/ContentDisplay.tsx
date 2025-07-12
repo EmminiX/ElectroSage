@@ -1,13 +1,17 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { useContent } from "@/hooks/useContent";
-import { useProgress } from "@/contexts/ProgressContext";
-import Button from "@/components/ui/Button";
-import VisualizationManager from "@/components/VisualizationManager";
-import { CheckCircle, Circle, Clock } from "lucide-react";
+import { useContent } from "@/contexts/ContentContext";
+import StructuredContent from "@/components/content/StructuredContent";
+import Breadcrumb from "@/components/navigation/Breadcrumb";
+import ProgressIndicator from "@/components/progress/ProgressIndicator";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
-export default function ContentDisplay() {
+interface ContentDisplayProps {
+  "data-oid"?: string;
+  "data-tour"?: string;
+}
+
+export default function ContentDisplay({ "data-oid": dataOid, "data-tour": dataTour }: ContentDisplayProps = {}) {
   const {
     currentSection,
     navigateNext,
@@ -16,122 +20,112 @@ export default function ContentDisplay() {
     error,
     sections,
   } = useContent();
-  const { updateSectionProgress, getSectionProgress, updateTimeSpent } =
-    useProgress();
-  const [timeStarted, setTimeStarted] = useState<Date | null>(null);
-  const [isCompleted, setIsCompleted] = useState(false);
 
-  // Track time when section changes
-  useEffect(() => {
-    if (currentSection) {
-      setTimeStarted(new Date());
-      setIsCompleted(getSectionProgress(currentSection.id) === 100);
-    }
-
-    return () => {
-      if (timeStarted && currentSection) {
-        const timeSpent = Math.round(
-          (new Date().getTime() - timeStarted.getTime()) / 60000,
-        ); // minutes
-        updateTimeSpent(currentSection.id, timeSpent);
-      }
-    };
-  }, [currentSection?.id]);
-
-  const handleMarkComplete = () => {
-    if (currentSection) {
-      updateSectionProgress(currentSection.id, !isCompleted);
-      setIsCompleted(!isCompleted);
-    }
-  };
-
-  if (loading)
+  if (loading) {
     return (
-      <div className="p-4" data-oid="nm.zlc:">
-        <p className="text-gray-700" data-oid="6zqahs6">
-          Loading content...
-        </p>
+      <div className="flex items-center justify-center h-96 bg-white dark:bg-gray-800 rounded-lg shadow-sm">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-electric-500 mx-auto mb-4"></div>
+          <p className="text-gray-600 dark:text-gray-300">Loading content...</p>
+        </div>
       </div>
     );
+  }
 
-  if (error)
+  if (error) {
     return (
-      <div className="p-4" data-oid="9wrac28">
-        <p className="text-red-500" data-oid="vy-56b2">
-          {error}
-        </p>
+      <div className="flex items-center justify-center h-96 bg-white dark:bg-gray-800 rounded-lg shadow-sm">
+        <div className="text-center">
+          <div className="text-red-500 dark:text-red-400 text-lg font-semibold mb-2">Error Loading Content</div>
+          <p className="text-gray-600 dark:text-gray-300">{error}</p>
+        </div>
       </div>
     );
+  }
+
+  if (!currentSection) {
+    return (
+      <div className="flex items-center justify-center h-96 bg-white dark:bg-gray-800 rounded-lg shadow-sm">
+        <div className="text-center">
+          <div className="text-gray-500 dark:text-gray-400 text-lg font-semibold mb-2">No Section Selected</div>
+          <p className="text-gray-600 dark:text-gray-300">Please select a section from the navigation menu.</p>
+        </div>
+      </div>
+    );
+  }
+
+  const currentIndex = sections.findIndex(s => s.id === currentSection.id);
+  const hasPrevious = currentIndex > 0;
+  const hasNext = currentIndex < sections.length - 1;
 
   return (
-    <div className="p-4 space-y-6" data-oid="60pkkxf">
-      <div data-oid="wkye6f8">
-        <h2 className="text-2xl font-semibold mb-4" data-oid="knp:2_z">
-          {currentSection?.title}
-        </h2>
-        <div
-          dangerouslySetInnerHTML={{
-            __html: currentSection?.htmlContent || "",
-          }}
-          data-oid="x-hyko."
-        />
-      </div>
-
-      {currentSection?.visualizations &&
-        currentSection.visualizations.length > 0 && (
-          <VisualizationManager
-            visualizations={currentSection.visualizations}
-            data-oid="hu74xcj"
-          />
-        )}
-
-      {/* Section completion status */}
-      <div className="bg-gray-50 p-4 rounded-lg border" data-oid="mvj8abo">
-        <div className="flex items-center justify-between" data-oid="6ddc.zc">
-          <div className="flex items-center gap-2" data-oid="u:obxzz">
-            {isCompleted ? (
-              <CheckCircle
-                className="w-5 h-5 text-green-600"
-                data-oid="yzkzmlv"
-              />
-            ) : (
-              <Circle className="w-5 h-5 text-gray-400" data-oid="xhiafdv" />
-            )}
-            <span className="text-sm font-medium" data-oid=":c:g7ua">
-              {isCompleted ? "Section Completed" : "Mark as Complete"}
-            </span>
+    <div 
+      className="h-full flex flex-col bg-gray-50 dark:bg-gray-900"
+      data-oid={dataOid}
+      data-tour={dataTour}
+    >
+      {/* Fixed Breadcrumb Navigation */}
+      <div className="flex-shrink-0 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 shadow-sm">
+        <div className="max-w-4xl mx-auto px-6 py-4">
+          <div className="flex items-center justify-between">
+            <Breadcrumb />
+            <ProgressIndicator 
+              sectionId={currentSection.id}
+              size="md"
+              showLabel={true}
+              showTimeSpent={true}
+            />
           </div>
-          <Button
-            variant={isCompleted ? "secondary" : "primary"}
-            size="sm"
-            onClick={handleMarkComplete}
-            data-oid="b.fifam"
-          >
-            {isCompleted ? "Mark Incomplete" : "Mark Complete"}
-          </Button>
+        </div>
+      </div>
+      
+      {/* Scrollable Main Content */}
+      <div className="flex-1 overflow-y-auto content-area">
+        <div className="pb-8">
+          <StructuredContent section={currentSection} />
         </div>
       </div>
 
-      <div
-        className="flex justify-between pt-4 border-t border-gray-200"
-        data-oid="_u.9i_i"
-      >
-        <Button
-          variant="outline"
-          onClick={navigatePrevious}
-          disabled={!currentSection}
-          data-oid="j3yupoq"
-        >
-          Previous
-        </Button>
-        <Button
-          variant="primary"
-          onClick={navigateNext}
-          disabled={!currentSection}
-          data-oid="o8rs8bl"
-        >
-          Next
-        </Button>
+      {/* Fixed Navigation Footer */}
+      <div className="flex-shrink-0 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 shadow-sm mb-4">
+        <div className="max-w-4xl mx-auto p-6">
+          <div className="flex items-center justify-between">
+            <button
+              onClick={navigatePrevious}
+              disabled={!hasPrevious}
+              className={`flex items-center px-6 py-3 rounded-lg font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-electric-500 ${
+                hasPrevious
+                  ? "bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700"
+                  : "bg-gray-100 dark:bg-gray-800 text-gray-400 dark:text-gray-500 cursor-not-allowed"
+              }`}
+            >
+              <ChevronLeft className="w-4 h-4 mr-2" />
+              Previous Section
+            </button>
+
+            <div className="text-center">
+              <div className="text-sm text-gray-600 dark:text-gray-400">
+                Section {currentIndex + 1} of {sections.length}
+              </div>
+              <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                {currentSection.title}
+              </div>
+            </div>
+
+            <button
+              onClick={navigateNext}
+              disabled={!hasNext}
+              className={`flex items-center px-6 py-3 rounded-lg font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-electric-500 ${
+                hasNext
+                  ? "bg-electric-600 text-white hover:bg-electric-700"
+                  : "bg-gray-100 dark:bg-gray-800 text-gray-400 dark:text-gray-500 cursor-not-allowed"
+              }`}
+            >
+              Next Section
+              <ChevronRight className="w-4 h-4 ml-2" />
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   );

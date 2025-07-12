@@ -2,6 +2,15 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Import accessibility styles */
+@import './accessibility.css';
+
+/* Import podcast player styles */
+@import './podcast.css';
+
+/* Import KaTeX CSS for mathematical expressions */
+@import url('https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css');
+
 /* Import accessibility fonts */
 @import url('https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&display=swap');
@@ -20,35 +29,30 @@ body {
   transition: font-size 0.2s ease, background-color 0.2s ease;
 }
 
-/* High contrast mode */
-.high-contrast {
-  --tw-bg-white: #000000;
-  --tw-text-gray-900: #ffffff;
-  --tw-text-gray-700: #ffffff;
-  --tw-text-gray-600: #cccccc;
-  --tw-border-gray-200: #ffffff;
+
+/* Subsection button container styling - DISABLED (unused and causing blue bar issue) */
+/*
+.content-area .subsection-button-container {
+  display: block !important;
+  margin: 1.5rem 0 !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  position: relative !important;
+  z-index: 999 !important;
+  clear: both !important;
+  background: #f8f9fa !important;
+  border: 2px solid #007bff !important;
+  min-height: 60px !important;
+  padding: 16px !important;
+  border-radius: 8px !important;
+  width: 100% !important;
 }
 
-.high-contrast * {
-  background-color: black !important;
-  color: white !important;
-  border-color: white !important;
+[data-theme="dark"] .content-area .subsection-button-container {
+  opacity: 1 !important;
+  visibility: visible !important;
 }
-
-.high-contrast button, .high-contrast input, .high-contrast select {
-  background-color: #333333 !important;
-  color: white !important;
-  border: 2px solid white !important;
-}
-
-/* Reduced motion */
-.reduce-motion *,
-.reduce-motion *::before,
-.reduce-motion *::after {
-  animation-duration: 0.01ms !important;
-  animation-iteration-count: 1 !important;
-  transition-duration: 0.01ms !important;
-}
+*/
 
 /* Focus mode - reduce distractions */
 .focus-mode {
@@ -59,6 +63,78 @@ body {
 .focus-mode .bg-blue-50,
 .focus-mode .bg-amber-50 {
   background-color: var(--tw-bg-gray-50) !important;
+}
+
+/* Dark mode base styles */
+[data-theme="dark"] {
+  color-scheme: dark;
+}
+
+/* Dark mode text overrides - specific to prose content only */
+[data-theme="dark"] .prose p {
+  color: rgb(209 213 219) !important;
+}
+
+[data-theme="dark"] .prose li {
+  color: rgb(209 213 219) !important;
+}
+
+[data-theme="dark"] .prose td {
+  color: rgb(209 213 219) !important;
+}
+
+[data-theme="dark"] .prose blockquote {
+  color: rgb(209 213 219) !important;
+}
+
+[data-theme="dark"] .prose figcaption {
+  color: rgb(209 213 219) !important;
+}
+
+[data-theme="dark"] .prose h1,
+[data-theme="dark"] .prose h2,
+[data-theme="dark"] .prose h3,
+[data-theme="dark"] .prose h4,
+[data-theme="dark"] .prose h5,
+[data-theme="dark"] .prose h6 {
+  color: rgb(255 255 255) !important;
+}
+
+[data-theme="dark"] .prose strong,
+[data-theme="dark"] .prose b {
+  color: rgb(255 255 255) !important;
+}
+
+[data-theme="dark"] body {
+  background-color: #0f172a;
+  color: #f1f5f9;
+}
+
+/* High contrast in dark mode */
+[data-theme="dark"].high-contrast {
+  filter: contrast(1.3) brightness(1.1);
+}
+
+[data-theme="dark"].high-contrast .bg-gray-800 {
+  background-color: #000000 !important;
+}
+
+[data-theme="dark"].high-contrast .text-white {
+  color: #ffffff !important;
+  text-shadow: 0 0 1px rgba(255, 255, 255, 0.5);
+}
+
+/* Ensure dark mode scrollbar */
+[data-theme="dark"] ::-webkit-scrollbar-track {
+  background: #1e293b;
+}
+
+[data-theme="dark"] ::-webkit-scrollbar-thumb {
+  background: #475569;
+}
+
+[data-theme="dark"] ::-webkit-scrollbar-thumb:hover {
+  background: #64748b;
 }
 
 /* Font family classes */
@@ -102,19 +178,361 @@ body {
   outline-offset: 2px !important;
 }
 
+/* High contrast focus indicators - softer colors */
+.high-contrast *:focus {
+  outline: 3px solid #718096 !important;
+  outline-offset: 2px !important;
+  box-shadow: 0 0 0 1px #1a202c !important;
+}
+
 /* Skip link for keyboard users */
 .skip-link {
   position: absolute;
   top: -40px;
   left: 6px;
-  background: theme('colors.electric.600');
+  background: theme('colors.gray.600'); /* Changed from electric.600 to gray.600 */
   color: white;
   padding: 8px;
   text-decoration: none;
   border-radius: 4px;
   z-index: 1000;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-100%);
 }
+
 
 .skip-link:focus {
   top: 6px;
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+/* Subsection Highlight Animation - Light Mode */
+.subsection-highlight {
+  position: relative;
+  background: linear-gradient(135deg, 
+    rgba(59, 130, 246, 0.15) 0%, 
+    rgba(147, 197, 253, 0.2) 50%, 
+    rgba(59, 130, 246, 0.15) 100%) !important;
+  border-left: 4px solid rgb(59, 130, 246) !important;
+  border-radius: 8px !important;
+  padding: 16px 20px !important;
+  margin: 8px 0 !important;
+  box-shadow: 
+    0 4px 12px rgba(59, 130, 246, 0.1),
+    0 0 0 1px rgba(59, 130, 246, 0.2) !important;
+  transform: translateX(0) !important;
+  transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  animation: subsectionPulse 4s ease-in-out !important;
+}
+
+/* Subsection Highlight Animation - Dark Mode */
+[data-theme="dark"] .subsection-highlight {
+  background: linear-gradient(135deg, 
+    rgba(96, 165, 250, 0.25) 0%, 
+    rgba(147, 197, 253, 0.3) 50%, 
+    rgba(96, 165, 250, 0.25) 100%) !important;
+  border-left: 4px solid rgb(96, 165, 250) !important;
+  box-shadow: 
+    0 4px 16px rgba(96, 165, 250, 0.2),
+    0 0 0 1px rgba(96, 165, 250, 0.3) !important;
+}
+
+/* High contrast mode - even more prominent */
+.high-contrast .subsection-highlight {
+  background: linear-gradient(135deg, 
+    rgba(59, 130, 246, 0.3) 0%, 
+    rgba(147, 197, 253, 0.4) 50%, 
+    rgba(59, 130, 246, 0.3) 100%) !important;
+  border-left: 6px solid rgb(59, 130, 246) !important;
+  box-shadow: 
+    0 6px 20px rgba(59, 130, 246, 0.25),
+    0 0 0 2px rgba(59, 130, 246, 0.4) !important;
+}
+
+[data-theme="dark"].high-contrast .subsection-highlight {
+  background: linear-gradient(135deg, 
+    rgba(96, 165, 250, 0.4) 0%, 
+    rgba(147, 197, 253, 0.5) 50%, 
+    rgba(96, 165, 250, 0.4) 100%) !important;
+  border-left: 6px solid rgb(147, 197, 253) !important;
+  box-shadow: 
+    0 6px 24px rgba(96, 165, 250, 0.3),
+    0 0 0 2px rgba(147, 197, 253, 0.5) !important;
+}
+
+/* Pulse animation for initial attention */
+@keyframes subsectionPulse {
+  0% {
+    transform: translateX(-4px) scale(1.01);
+    opacity: 0.9;
+  }
+  25% {
+    transform: translateX(0) scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: translateX(0) scale(1);
+    opacity: 1;
+  }
+  75% {
+    transform: translateX(0) scale(1);
+    opacity: 0.95;
+  }
+  100% {
+    transform: translateX(0) scale(1);
+    opacity: 0.8;
+  }
+}
+
+/* Fade out animation */
+.subsection-highlight-fade {
+  background: transparent !important;
+  border-left: none !important;
+  border-radius: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  box-shadow: none !important;
+  transform: translateX(0) !important;
+  transition: all 1.2s ease-out !important;
+}
+
+/* Ensure headings in highlighted sections remain visible */
+.subsection-highlight h1,
+.subsection-highlight h2,
+.subsection-highlight h3,
+.subsection-highlight h4,
+.subsection-highlight h5,
+.subsection-highlight h6 {
+  position: relative;
+  z-index: 10;
+  color: inherit !important;
+}
+
+/* Mathematical Formula Highlighting */
+.katex-display,
+.katex {
+  background: linear-gradient(135deg, 
+    rgba(34, 197, 94, 0.08) 0%, 
+    rgba(74, 222, 128, 0.12) 50%, 
+    rgba(34, 197, 94, 0.08) 100%) !important;
+  border: 1px solid rgba(34, 197, 94, 0.2) !important;
+  border-radius: 8px !important;
+  padding: 12px 16px !important;
+  margin: 16px 0 !important;
+  position: relative !important;
+  box-shadow: 
+    0 2px 8px rgba(34, 197, 94, 0.1),
+    0 0 0 1px rgba(34, 197, 94, 0.15) !important;
+  transition: all 0.3s ease !important;
+}
+
+/* Inline math styling */
+.katex:not(.katex-display) {
+  background: rgba(34, 197, 94, 0.1) !important;
+  padding: 4px 8px !important;
+  margin: 0 2px !important;
+  border-radius: 4px !important;
+  border: 1px solid rgba(34, 197, 94, 0.25) !important;
+  font-weight: 500 !important;
+}
+
+/* Dark mode formula styling */
+[data-theme="dark"] .katex-display,
+[data-theme="dark"] .katex {
+  background: linear-gradient(135deg, 
+    rgba(74, 222, 128, 0.15) 0%, 
+    rgba(134, 239, 172, 0.2) 50%, 
+    rgba(74, 222, 128, 0.15) 100%) !important;
+  border: 1px solid rgba(74, 222, 128, 0.3) !important;
+  box-shadow: 
+    0 2px 12px rgba(74, 222, 128, 0.15),
+    0 0 0 1px rgba(74, 222, 128, 0.25) !important;
+}
+
+[data-theme="dark"] .katex:not(.katex-display) {
+  background: rgba(74, 222, 128, 0.15) !important;
+  border: 1px solid rgba(74, 222, 128, 0.35) !important;
+}
+
+/* High contrast mode for formulas */
+.high-contrast .katex-display,
+.high-contrast .katex {
+  background: rgba(34, 197, 94, 0.2) !important;
+  border: 2px solid rgba(34, 197, 94, 0.4) !important;
+  box-shadow: 
+    0 4px 16px rgba(34, 197, 94, 0.2),
+    0 0 0 2px rgba(34, 197, 94, 0.3) !important;
+}
+
+[data-theme="dark"].high-contrast .katex-display,
+[data-theme="dark"].high-contrast .katex {
+  background: rgba(74, 222, 128, 0.25) !important;
+  border: 2px solid rgba(74, 222, 128, 0.5) !important;
+  box-shadow: 
+    0 4px 20px rgba(74, 222, 128, 0.25),
+    0 0 0 2px rgba(74, 222, 128, 0.4) !important;
+}
+
+/* Formula label styling */
+.katex-display::before {
+  content: "📐 Formula";
+  position: absolute;
+  top: -8px;
+  left: 12px;
+  background: rgba(34, 197, 94, 0.9);
+  color: white;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-family: system-ui, sans-serif;
+}
+
+[data-theme="dark"] .katex-display::before {
+  background: rgba(74, 222, 128, 0.9);
+  color: rgba(15, 23, 42, 0.9);
+}
+
+/* Example Section Styling - Applied via JavaScript */
+.example-highlight {
+  background: linear-gradient(135deg, 
+    rgba(59, 130, 246, 0.08) 0%, 
+    rgba(147, 197, 253, 0.12) 50%, 
+    rgba(59, 130, 246, 0.08) 100%) !important;
+  border-left: 4px solid rgb(59, 130, 246) !important;
+  border-radius: 0 8px 8px 0 !important;
+  padding: 12px 16px !important;
+  margin: 12px 0 !important;
+  position: relative !important;
+  box-shadow: 
+    0 2px 8px rgba(59, 130, 246, 0.1),
+    0 0 0 1px rgba(59, 130, 246, 0.15) !important;
+}
+
+.example-highlight::before {
+  content: "💡 Example";
+  position: absolute;
+  top: -8px;
+  left: 12px;
+  background: rgba(59, 130, 246, 0.9);
+  color: white;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-family: system-ui, sans-serif;
+}
+
+/* Dark mode example styling */
+[data-theme="dark"] .example-highlight {
+  background: linear-gradient(135deg, 
+    rgba(96, 165, 250, 0.15) 0%, 
+    rgba(147, 197, 253, 0.2) 50%, 
+    rgba(96, 165, 250, 0.15) 100%) !important;
+  border-left: 4px solid rgb(96, 165, 250) !important;
+  box-shadow: 
+    0 2px 12px rgba(96, 165, 250, 0.15),
+    0 0 0 1px rgba(96, 165, 250, 0.25) !important;
+}
+
+[data-theme="dark"] .example-highlight::before {
+  background: rgba(96, 165, 250, 0.9);
+  color: rgba(15, 23, 42, 0.9);
+}
+
+/* Practice Questions Section Styling */
+.practice-questions-highlight {
+  background: linear-gradient(135deg, 
+    rgba(168, 85, 247, 0.08) 0%, 
+    rgba(196, 181, 253, 0.12) 50%, 
+    rgba(168, 85, 247, 0.08) 100%) !important;
+  border-left: 4px solid rgb(168, 85, 247) !important;
+  border-radius: 0 8px 8px 0 !important;
+  padding: 12px 16px !important;
+  margin: 12px 0 !important;
+  position: relative !important;
+  box-shadow: 
+    0 2px 8px rgba(168, 85, 247, 0.1),
+    0 0 0 1px rgba(168, 85, 247, 0.15) !important;
+}
+
+.practice-questions-highlight::before {
+  content: "📝 Practice Questions";
+  position: absolute;
+  top: -8px;
+  left: 12px;
+  background: rgba(168, 85, 247, 0.9);
+  color: white;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-family: system-ui, sans-serif;
+}
+
+/* Dark mode practice questions styling */
+[data-theme="dark"] .practice-questions-highlight {
+  background: linear-gradient(135deg, 
+    rgba(196, 181, 253, 0.15) 0%, 
+    rgba(221, 214, 254, 0.2) 50%, 
+    rgba(196, 181, 253, 0.15) 100%) !important;
+  border-left: 4px solid rgb(196, 181, 253) !important;
+  box-shadow: 
+    0 2px 12px rgba(196, 181, 253, 0.15),
+    0 0 0 1px rgba(196, 181, 253, 0.25) !important;
+}
+
+[data-theme="dark"] .practice-questions-highlight::before {
+  background: rgba(196, 181, 253, 0.9);
+  color: rgba(15, 23, 42, 0.9);
+}
+
+/* Applications Section Styling */
+.applications-highlight {
+  background: linear-gradient(135deg, 
+    rgba(245, 158, 11, 0.08) 0%, 
+    rgba(251, 191, 36, 0.12) 50%, 
+    rgba(245, 158, 11, 0.08) 100%) !important;
+  border-left: 4px solid rgb(245, 158, 11) !important;
+  border-radius: 0 8px 8px 0 !important;
+  padding: 12px 16px !important;
+  margin: 12px 0 !important;
+  position: relative !important;
+  box-shadow: 
+    0 2px 8px rgba(245, 158, 11, 0.1),
+    0 0 0 1px rgba(245, 158, 11, 0.15) !important;
+}
+
+.applications-highlight::before {
+  content: "🔧 Applications";
+  position: absolute;
+  top: -8px;
+  left: 12px;
+  background: rgba(245, 158, 11, 0.9);
+  color: white;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-family: system-ui, sans-serif;
+}
+
+/* Dark mode applications styling */
+[data-theme="dark"] .applications-highlight {
+  background: linear-gradient(135deg, 
+    rgba(251, 191, 36, 0.15) 0%, 
+    rgba(252, 211, 77, 0.2) 50%, 
+    rgba(251, 191, 36, 0.15) 100%) !important;
+  border-left: 4px solid rgb(251, 191, 36) !important;
+  box-shadow: 
+    0 2px 12px rgba(251, 191, 36, 0.15),
+    0 0 0 1px rgba(251, 191, 36, 0.25) !important;
+}
+
+[data-theme="dark"] .applications-highlight::before {
+  background: rgba(251, 191, 36, 0.9);
+  color: rgba(15, 23, 42, 0.9);
 }

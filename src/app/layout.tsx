@@ -3,9 +3,46 @@ import "@/styles/globals.css";
 import ClientLayout from "@/components/layout/ClientLayout";
 
 export const metadata: Metadata = {
-  title: "Basic Electricity Tutor",
+  title: "ElectroSage Academy - Master Electrical Engineering with AI",
   description:
-    "Interactive web application for learning basic electricity concepts",
+    "Comprehensive electrical education platform featuring AI-powered Socratic tutoring, 14 interactive visualizations, and professional circuit building tools. Master electrical engineering from fundamentals to advanced concepts.",
+  keywords: [
+    "electrical engineering",
+    "electricity education",
+    "AI tutor",
+    "interactive learning",
+    "circuit builder",
+    "electrical visualization",
+    "STEM education",
+    "ElectroSage",
+    "Socratic method",
+    "physics"
+  ],
+  authors: [{ name: "ElectroSage Academy Team" }],
+  creator: "ElectroSage Academy",
+  publisher: "ElectroSage Academy",
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+    },
+  },
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    title: "ElectroSage Academy - Master Electrical Engineering with AI",
+    description:
+      "Comprehensive electrical education platform with AI-powered tutoring, interactive visualizations, and professional circuit tools.",
+    siteName: "ElectroSage Academy",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "ElectroSage Academy - Master Electrical Engineering with AI",
+    description:
+      "Comprehensive electrical education platform with AI-powered tutoring, interactive visualizations, and professional circuit tools.",
+  },
 };
 
 export default function RootLayout({
@@ -16,24 +53,9 @@ export default function RootLayout({
   return (
     <html lang="en" data-oid="pcldwnh">
       <head data-oid="._oblg9">
-        <link
-          rel="preconnect"
-          href="https://fonts.googleapis.com"
-          data-oid="qyk.oxt"
-        />
-        <link
-          rel="preconnect"
-          href="https://fonts.gstatic.com"
-          crossOrigin="anonymous"
-          data-oid="cs5oxib"
-        />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&display=swap"
-          rel="stylesheet"
-          data-oid="oojuqhs"
-        />
+        {/* Fonts are loaded in _document.tsx */}
       </head>
-      <body className="font-lexend antialiased bg-gray-50" data-oid="7qpeq2m">
+      <body className="antialiased bg-gray-50 animations-enabled" data-oid="7qpeq2m">
         <a href="#main" className="skip-link" data-oid="d5ntef0">
           Skip to main content
         </a>

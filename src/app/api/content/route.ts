@@ -1,17 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { readFileSync } from 'fs'
-import { join } from 'path'
-import { parseMarkdownContent } from '@/lib/content/parser'
+import { parseContentFromSections } from '@/lib/content/parser'
 import { ContentResponse } from '@/data/types'
 
 export async function GET(request: NextRequest) {
   try {
-    // Read the content file
-    const contentPath = join(process.cwd(), 'content', 'Basic_Electricity_Tutor_Content.md')
-    const content = readFileSync(contentPath, 'utf-8')
-    
-    // Parse the content
-    const sections = parseMarkdownContent(content)
+    // Use the new section-based parser for better performance
+    const sections = parseContentFromSections()
     
     const response: ContentResponse = {
       sections,
@@ -32,12 +26,8 @@ export async function POST(request: NextRequest) {
   try {
     const { sectionId } = await request.json()
     
-    // Read the content file
-    const contentPath = join(process.cwd(), 'content', 'Basic_Electricity_Tutor_Content.md')
-    const content = readFileSync(contentPath, 'utf-8')
-    
-    // Parse the content
-    const sections = parseMarkdownContent(content)
+    // Use the new section-based parser
+    const sections = parseContentFromSections()
     
     // Find specific section
     const section = sections.find(s => s.id === sectionId)
@@ -49,7 +39,7 @@ export async function POST(request: NextRequest) {
       )
     }
     
-    return NextResponse.json(section)
+    return NextResponse.json({ section })
   } catch (error) {
     console.error('Error fetching section:', error)
     return NextResponse.json(

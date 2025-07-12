@@ -6,7 +6,7 @@ export default function Loading() {
     >
       <div className="flex flex-col items-center gap-4" data-oid="8arpwa:">
         <div
-          className="animate-spin rounded-full h-12 w-12 border-b-2 border-electric-600"
+          className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-600"
           data-oid="p86ap1g"
         ></div>
         <p className="text-gray-600" data-oid=".c9ayvw">

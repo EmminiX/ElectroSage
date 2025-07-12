@@ -1,0 +1,21 @@
+# Podcast Audio Files
+
+This directory contains the educational podcast episodes for ElectroSage Academy.
+
+## Current Episodes:
+- section-1.mp3 - "The Atomic Ballet: Unveiling the Dance of Electrons" (18:24)
+- section-2.mp3 - "The Invisible Forces of Electricity Unveiled" (21:38)
+- section-3.mp3 - "The Hidden Dance of Electricity: Understanding Circuits" (19:52)
+- section-4.mp3 - "Unveiling the Invisible: Mastering Electrical Measurements" (23:15)
+- section-5.mp3 - "The Invisible Dance of Electrical Power" (20:47)
+- section-6.mp3 - "Shocking Truths: The Hidden Dangers of Electricity" (22:33)
+- section-7.mp3 - "Unveiling the Secrets of Home Electrical Systems" (25:18)
+- section-8.mp3 - "The Tiny Titans of Technology: Transistors Unleashed" (19:55)
+
+## File Requirements:
+- Format: MP3
+- Quality: 128kbps or higher recommended
+- Duration: 18-25 minutes per episode
+
+## Usage:
+These audio files are automatically loaded by the podcast player component located at the top center of the application interface.
