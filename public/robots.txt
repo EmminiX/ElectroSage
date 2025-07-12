@@ -1,0 +1,68 @@
+# ElectroSage Academy - Robots.txt
+# https://electrosage.emmi.zone/robots.txt
+
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /_next/
+Disallow: /admin/
+Disallow: /private/
+
+# Allow search engines to crawl educational content
+Allow: /sections/
+Allow: /about/
+Allow: /resources/
+
+# Sitemap location
+Sitemap: https://electrosage.emmi.zone/sitemap.xml
+Sitemap: https://electrosage.emmi.zone/sitemap-0.xml
+
+# Crawl-delay for polite crawling
+Crawl-delay: 1
+
+# Specific rules for major search engines
+User-agent: Googlebot
+Allow: /
+Disallow: /api/
+Crawl-delay: 1
+
+User-agent: Bingbot
+Allow: /
+Disallow: /api/
+Crawl-delay: 1
+
+User-agent: Slurp
+Allow: /
+Disallow: /api/
+Crawl-delay: 2
+
+# Block malicious bots
+User-agent: SemrushBot
+Disallow: /
+
+User-agent: AhrefsBot
+Disallow: /
+
+User-agent: MJ12bot
+Disallow: /
+
+# Educational content specifics
+# Allow indexing of learning materials
+Allow: /sections/introduction-to-electrical-engineering
+Allow: /sections/atomic-structure-and-fundamentals
+Allow: /sections/understanding-the-atom
+Allow: /sections/electron-shells-and-valence
+Allow: /sections/electrical-charge-and-interaction
+Allow: /sections/coulombs-law-and-quantification
+Allow: /sections/basic-electrical-units
+Allow: /sections/circuit-fundamentals
+
+# Allow podcast content
+Allow: /podcasts/
+Allow: /audio/
+
+# Allow visualization content
+Allow: /visualizations/
+
+# Host information
+Host: electrosage.emmi.zone
