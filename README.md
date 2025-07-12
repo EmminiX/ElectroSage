@@ -2,6 +2,12 @@
 
 A comprehensive electrical education platform featuring AI-powered Socratic tutoring, 14 interactive visualizations, educational podcasts, voice-to-text learning, and professional circuit building tools. Master electrical engineering from fundamentals to advanced concepts.
 
+**🚀 Live Demo**: [Visit ElectroSage Academy](https://github.com/EmminiX/ElectroSage)
+
+![ElectroSage Academy Interface](./public/electrosage-screenshot.jpg)
+
+*ElectroSage Academy's comprehensive learning interface featuring AI-powered Socratic tutoring, interactive content navigation, and real-time progress tracking.*
+
 ## Features
 
 ### 🎓 Comprehensive Electrical Education
@@ -58,8 +64,8 @@ A comprehensive electrical education platform featuring AI-powered Socratic tuto
 
 1. **Clone the repository**
    ```bash
-   git clone <repository-url>
-   cd electrosage-academy
+   git clone https://github.com/EmminiX/ElectroSage.git
+   cd ElectroSage
    ```
 
 2. **Install dependencies**
@@ -87,26 +93,75 @@ A comprehensive electrical education platform featuring AI-powered Socratic tuto
 
 ## Deployment
 
-### Production Build
+### 🐳 Docker Deployment (Recommended)
+
+The easiest way to deploy ElectroSage Academy is using Docker Compose:
+
+1. **Prerequisites**
+   - Docker and Docker Compose installed
+   - OpenAI API key
+
+2. **Environment Setup**
+   ```bash
+   # Copy the environment template
+   cp .env.example .env.local
+   
+   # Edit .env.local with your OpenAI API key
+   nano .env.local
+   ```
+
+3. **Deploy with Docker Compose**
+   ```bash
+   # Build and start the application
+   docker compose build
+   docker compose up -d
+   
+   # View logs (optional)
+   docker compose logs -f
+   ```
+
+4. **Access the Application**
+   - Open your browser to [http://localhost:4100](http://localhost:4100)
+   - The application will be running in production mode with optimized performance
+
+5. **Management Commands**
+   ```bash
+   # Stop the application
+   docker compose down
+   
+   # Rebuild after code changes
+   docker compose build --no-cache
+   docker compose up -d
+   
+   # View application status
+   docker compose ps
+   ```
+
+### Traditional Production Build
 ```bash
 npm run build
 npm start
 ```
 
 ### Environment Variables for Production
-- `OPENAI_API_KEY`: Your OpenAI API key
+- `OPENAI_API_KEY`: Your OpenAI API key (**required**)
 - `OPENAI_MODEL`: AI model to use (default: gpt-4)
 - `OPENAI_MAX_TOKENS`: Maximum tokens per response (default: 1000)
 - `OPENAI_TEMPERATURE`: AI response creativity (default: 0.7)
 - `NEXT_PUBLIC_APP_NAME`: Application name
 - `NEXT_PUBLIC_APP_VERSION`: Application version
+- `NODE_ENV`: Set to "production" for optimized builds
+- `PORT`: Application port (default: 4100)
 
 ### Deployment Platforms
 This app can be deployed on:
-- **Vercel** (recommended for Next.js)
+- **Docker Compose** (recommended - see above)
+- **Vercel** (excellent for Next.js)
 - **Netlify**
 - **AWS Amplify**
-- **Docker containers**
+- **Digital Ocean App Platform**
+- **Heroku**
+- **Any VPS with Docker support**
 
 ## Usage Guide
 
@@ -146,22 +201,31 @@ This app can be deployed on:
 
 ## Technical Architecture
 
-### Frontend
-- **Next.js 15**: React framework with App Router
-- **TypeScript**: Type-safe development
-- **Tailwind CSS**: Utility-first styling
-- **React Context**: State management
+### Frontend Stack
+- **Next.js 15**: React framework with App Router for optimal performance
+- **TypeScript**: Type-safe development with full IntelliSense support
+- **Tailwind CSS**: Utility-first CSS framework for responsive design
+- **React Context**: Global state management for learning progress and accessibility
+- **Framer Motion**: Smooth animations and transitions
 
-### Visualizations
-- **D3.js**: Data visualization library
-- **Three.js**: 3D graphics for atomic models
-- **Canvas API**: Interactive circuit builder
+### Interactive Visualizations
+- **D3.js**: Advanced data visualization library for educational charts
+- **Three.js**: 3D graphics engine for atomic structure visualization
+- **Canvas API**: Professional circuit builder with drag-and-drop interface
+- **Web Audio API**: Real-time audio processing for AC waveform analysis
 
-### Backend
-- **Next.js API Routes**: Server-side functionality
-- **OpenAI API**: AI tutoring integration with GPT-4
-- **OpenAI Whisper**: Speech-to-text transcription
-- **Markdown Processing**: Content rendering with math support
+### Backend & AI
+- **Next.js API Routes**: Server-side functionality and API endpoints
+- **OpenAI GPT-4**: Advanced AI tutoring with Socratic method implementation
+- **OpenAI Whisper**: High-accuracy speech-to-text transcription
+- **Markdown Processing**: Rich content rendering with mathematical expression support
+- **Remark/Rehype**: Extensible markdown processing pipeline
+
+### DevOps & Deployment
+- **Docker**: Containerized deployment with multi-stage builds
+- **Docker Compose**: Orchestration for easy local and production deployment
+- **ESLint & TypeScript**: Code quality and type checking
+- **Next.js Optimization**: Automatic code splitting and performance optimization
 
 ### Key Components
 - `ContentContext`: Manages learning content and navigation
@@ -194,6 +258,56 @@ src/
 - `npm run start`: Start production server
 - `npm run lint`: Run ESLint
 
+### Performance Features
+- **Next.js 15 Optimizations**: Automatic code splitting and tree shaking
+- **Image Optimization**: Responsive images with WebP format
+- **Static Generation**: Pre-rendered pages for faster loading
+- **Edge Runtime**: Optimized API routes with global deployment
+- **Progressive Web App**: Offline support and mobile app-like experience
+
+## Troubleshooting
+
+### Common Issues
+
+**1. OpenAI API Key Issues**
+```bash
+# Verify your API key is set correctly
+echo $OPENAI_API_KEY
+
+# Check if the key has the correct permissions
+# Ensure your OpenAI account has sufficient credits
+```
+
+**2. Docker Build Fails**
+```bash
+# Clear Docker cache and rebuild
+docker system prune -f
+docker compose build --no-cache
+```
+
+**3. Port Already in Use**
+```bash
+# Change the port in docker-compose.yml or .env.local
+# Default port is 4100, you can use any available port
+```
+
+**4. Voice Input Not Working**
+- Ensure you're using HTTPS or localhost
+- Check browser microphone permissions
+- Verify Web Audio API support in your browser
+
+**5. Visualizations Not Loading**
+- Clear browser cache and cookies
+- Ensure JavaScript is enabled
+- Check browser console for any errors
+
+### Browser Compatibility
+- **Chrome**: Fully supported (recommended)
+- **Firefox**: Fully supported
+- **Safari**: Fully supported
+- **Edge**: Fully supported
+- **Mobile**: Responsive design works on all mobile browsers
+
 ## Contributing
 
 1. Fork the repository
@@ -202,10 +316,62 @@ src/
 4. Add tests if applicable
 5. Submit a pull request
 
+## Educational Content
+
+### Learning Sections
+1. **Introduction to Electrical Engineering** - Foundational concepts and career overview
+2. **Atomic Structure and Electrical Fundamentals** - How matter enables electrical flow
+3. **Understanding the Atom** - Detailed atomic behavior and electrical properties
+4. **Electron Shells and Valence Electrons** - Electronic structure and conductivity
+5. **Electrical Charge and Charge Interaction** - Fundamental forces and field theory
+6. **Coulomb's Law and Charge Quantification** - Mathematical foundations of electrostatics
+7. **Basic Electrical Units and Properties** - Standard units and measurement principles
+8. **Circuit Fundamentals** - Practical circuit analysis and component behavior
+
+### Assessment & Progress
+- **Interactive Quizzes**: Knowledge verification for each section
+- **Progress Tracking**: Visual progress indicators and completion statistics
+- **Mastery-Based Learning**: Must demonstrate understanding before advancing
+- **Socratic AI Feedback**: Personalized guidance without giving direct answers
+
+## Contributing
+
+We welcome contributions to ElectroSage Academy! Here's how you can help:
+
+### Development Setup
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Make your changes
+4. Add tests if applicable
+5. Ensure all tests pass (`npm run lint`)
+6. Commit your changes (`git commit -m 'Add amazing feature'`)
+7. Push to the branch (`git push origin feature/amazing-feature`)
+8. Open a Pull Request
+
+### Areas for Contribution
+- **Educational Content**: Additional sections, improved explanations
+- **Visualizations**: New interactive demonstrations and simulations
+- **Accessibility**: Enhanced screen reader support and keyboard navigation
+- **Internationalization**: Multi-language support
+- **Performance**: Optimization and speed improvements
+- **Testing**: Unit tests and integration tests
+
 ## License
 
-This project is licensed under the ISC License.
+This project is licensed under the ISC License. See the LICENSE file for details.
+
+## Acknowledgments
+
+- **OpenAI**: For providing the GPT-4 and Whisper APIs that power our AI tutoring
+- **Next.js Team**: For the excellent React framework and development experience
+- **Educational Community**: For feedback and suggestions that improve the learning experience
 
 ## Support
 
-For questions or issues, please open a GitHub issue or contact the development team.
+- **Issues**: Report bugs or request features via [GitHub Issues](https://github.com/EmminiX/ElectroSage/issues)
+- **Discussions**: Join community discussions in [GitHub Discussions](https://github.com/EmminiX/ElectroSage/discussions)
+- **Documentation**: Find additional help in our [Wiki](https://github.com/EmminiX/ElectroSage/wiki)
+
+---
+
+**Made with ❤️ for electrical engineering education**
