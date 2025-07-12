@@ -101,9 +101,34 @@ export const trackReferral = (source: string, medium: string, campaign?: string)
   });
 };
 
+// Debug function to check if Plausible is loaded
+export const debugPlausible = () => {
+  if (typeof window !== 'undefined') {
+    console.log('Plausible Debug Info:');
+    console.log('- Domain:', window.location.hostname);
+    console.log('- Plausible function available:', typeof window.plausible);
+    console.log('- Expected domain: electrosage.emmi.zone');
+    
+    if (window.plausible) {
+      console.log('✅ Plausible is loaded and ready');
+      window.plausible('test-event', { props: { debug: true } });
+    } else {
+      console.log('❌ Plausible not found - checking script loading...');
+      const script = document.querySelector('[data-domain="electrosage.emmi.zone"]');
+      console.log('- Script element found:', !!script);
+      console.log('- Script src:', script?.getAttribute('src'));
+    }
+  }
+};
+
 // Custom hook for page view tracking
 export const usePageTracking = () => {
   useEffect(() => {
+    // Debug Plausible loading
+    const timer = setTimeout(() => {
+      debugPlausible();
+    }, 1000);
+
     // Track referral source
     if (typeof window !== 'undefined') {
       const urlParams = new URLSearchParams(window.location.search);
@@ -121,11 +146,14 @@ export const usePageTracking = () => {
       }
     }
 
-    // Track initial page load
-    trackEvent('Page View');
+    // Track initial page load (delay slightly to ensure Plausible is loaded)
+    const pageViewTimer = setTimeout(() => {
+      trackEvent('Page View');
+    }, 500);
 
     return () => {
-      // Cleanup if needed
+      clearTimeout(timer);
+      clearTimeout(pageViewTimer);
     };
   }, []);
 };

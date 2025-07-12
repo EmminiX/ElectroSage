@@ -10,6 +10,7 @@ import { useContent } from "@/contexts/ContentContext";
 import { usePodcast } from "@/contexts/PodcastContext";
 import { useTour } from "@/contexts/TourContext";
 import ResourcesPopup from "@/components/resources/ResourcesPopup";
+import BuyMeACoffee from "@/components/BuyMeACoffee";
 
 interface HeaderProps {
   onToggleAccessibility?: () => void;
@@ -101,7 +102,10 @@ export default function Header({ onToggleAccessibility, showAccessibilityPanel }
           </Button>
         </div>
 
-        <div className="flex items-center gap-2" data-oid="lccf-qo">
+        <div className="flex items-center gap-3" data-oid="lccf-qo">
+          {/* Buy Me A Coffee Button */}
+          <BuyMeACoffee variant="compact" />
+          
           {/* Progress indicator */}
           <div
             className="flex items-center gap-2 px-3 py-1 bg-gray-100 dark:bg-gray-700 rounded-full"

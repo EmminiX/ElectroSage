@@ -3,6 +3,7 @@ import "@/styles/globals.css";
 import ClientLayout from "@/components/layout/ClientLayout";
 import StructuredData from "@/components/StructuredData";
 import Analytics from "@/components/Analytics";
+import { PlausibleDevDebug } from "@/components/PlausibleDebug";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://electrosage.emmi.zone"),
@@ -134,11 +135,17 @@ export default function RootLayout({
         <link rel="icon" type="image/png" sizes="16x16" href="/icons/favicon-16x16.png" />
         <meta name="msapplication-TileColor" content="#0284c7" />
         <meta name="theme-color" content="#0284c7" />
-        <script defer data-domain="electrosage.emmi.zone" src="https://plausible.emmi.zone/js/script.js"></script>
+        <script 
+          defer 
+          data-domain="electrosage.emmi.zone" 
+          src="https://plausible.emmi.zone/js/script.js"
+          data-api="https://plausible.emmi.zone/api/event"
+        ></script>
       </head>
       <body className="antialiased bg-gray-50 animations-enabled" data-oid="7qpeq2m">
         <StructuredData />
         <Analytics />
+        <PlausibleDevDebug />
         <a href="#main" className="skip-link" data-oid="d5ntef0">
           Skip to main content
         </a>

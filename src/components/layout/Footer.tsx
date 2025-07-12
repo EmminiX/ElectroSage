@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { ExternalLink, Zap, Globe, Leaf, Terminal, Calculator, Bot, BookOpen } from "lucide-react";
+import BuyMeACoffee from "@/components/BuyMeACoffee";
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
@@ -178,9 +179,12 @@ export default function Footer() {
               </motion.a>
             </div>
 
-            {/* Copyright */}
-            <div className="text-sm text-gray-500 dark:text-gray-400">
-              © {currentYear} Interactive Learning Platforms. Educational use encouraged.
+            {/* Support & Copyright */}
+            <div className="flex items-center space-x-4">
+              <BuyMeACoffee variant="footer" />
+              <div className="text-sm text-gray-500 dark:text-gray-400">
+                © {currentYear} Interactive Learning Platforms. Educational use encouraged.
+              </div>
             </div>
           </div>
         </div>
