@@ -5,6 +5,7 @@ import StructuredData from "@/components/StructuredData";
 import Analytics from "@/components/Analytics";
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://electrosage.emmi.zone"),
   title: {
     default: "ElectroSage Academy - Master Electrical Engineering with AI",
     template: "%s | ElectroSage Academy"
@@ -74,11 +75,6 @@ export const metadata: Metadata = {
         type: "image/jpeg",
       },
     ],
-    article: {
-      authors: ["ElectroSage Academy Team"],
-      section: "Education Technology",
-      tags: ["Electrical Engineering", "AI Education", "EdTech", "STEM Learning", "Interactive Visualizations"],
-    },
   },
   twitter: {
     card: "summary_large_image",
@@ -112,6 +108,13 @@ export const metadata: Metadata = {
     "theme-color": "#0284c7",
     "msapplication-TileColor": "#0284c7",
     "msapplication-config": "/browserconfig.xml",
+    // LinkedIn-specific meta tags
+    "article:author": "ElectroSage Academy Team",
+    "article:section": "Education Technology",
+    "article:tag": "Electrical Engineering, AI Education, EdTech, STEM Learning, Interactive Visualizations",
+    // Additional professional metadata
+    "og:type": "website",
+    "og:site_name": "ElectroSage Academy",
   },
 };
 
