@@ -178,6 +178,33 @@ export default function StructuredData() {
     ]
   };
 
+  const linkedInOptimizedSchema = {
+    "@context": "https://schema.org",
+    "@type": "CreativeWork",
+    "name": "ElectroSage Academy - AI-Powered Electrical Engineering Education",
+    "description": "Revolutionary educational platform combining AI tutoring, interactive visualizations, and voice-to-text learning for electrical engineering mastery",
+    "url": "https://electrosage.emmi.zone",
+    "author": {
+      "@type": "Organization",
+      "name": "ElectroSage Academy Team"
+    },
+    "datePublished": "2025-01-12",
+    "dateModified": "2025-01-12",
+    "keywords": "electrical engineering, AI education, EdTech, STEM learning, interactive visualizations, Socratic method, voice learning, circuit analysis",
+    "audience": {
+      "@type": "EducationalAudience",
+      "educationalRole": ["student", "professional", "educator", "engineer"]
+    },
+    "educationalUse": ["instruction", "professional development", "skill building"],
+    "learningResourceType": ["interactive media", "simulation", "tutorial", "assessment"],
+    "interactivityType": "active",
+    "typicalAgeRange": "18-65",
+    "inLanguage": "en-US",
+    "isAccessibleForFree": true,
+    "license": "https://electrosage.emmi.zone/license",
+    "citation": "ElectroSage Academy. (2025). AI-Powered Electrical Engineering Education Platform. Retrieved from https://electrosage.emmi.zone"
+  };
+
   return (
     <>
       <script
@@ -203,6 +230,10 @@ export default function StructuredData() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(linkedInOptimizedSchema) }}
       />
     </>
   );

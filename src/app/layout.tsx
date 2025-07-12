@@ -70,10 +70,15 @@ export const metadata: Metadata = {
         url: "/electrosage-screenshot.jpg",
         width: 1200,
         height: 630,
-        alt: "ElectroSage Academy - AI-Powered Electrical Engineering Education Platform",
+        alt: "ElectroSage Academy - AI-Powered Electrical Engineering Education Platform featuring interactive circuit builder, AI tutor chat, and comprehensive learning modules",
         type: "image/jpeg",
       },
     ],
+    article: {
+      authors: ["ElectroSage Academy Team"],
+      section: "Education Technology",
+      tags: ["Electrical Engineering", "AI Education", "EdTech", "STEM Learning", "Interactive Visualizations"],
+    },
   },
   twitter: {
     card: "summary_large_image",

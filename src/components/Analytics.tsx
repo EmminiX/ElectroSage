@@ -70,13 +70,56 @@ export const trackError = (errorType: string, errorMessage: string, context?: st
   });
 };
 
+// LinkedIn-specific tracking
+export const trackLinkedInEvents = {
+  profileView: () => trackEvent('LinkedIn Profile View'),
+  shareClick: () => trackEvent('LinkedIn Share Clicked'),
+  commentEngagement: () => trackEvent('LinkedIn Comment Engagement'),
+  connectionRequest: () => trackEvent('LinkedIn Connection Request'),
+  postImpression: () => trackEvent('LinkedIn Post Impression'),
+  ctaClick: (ctaType: string) => trackEvent('LinkedIn CTA Click', { type: ctaType }),
+};
+
+// Social media tracking
+export const trackSocialMedia = {
+  share: (platform: string, content: string) => 
+    trackEvent('Content Shared', { platform, content }),
+  
+  click: (platform: string, source: string) => 
+    trackEvent('Social Media Click', { platform, source }),
+  
+  follow: (platform: string) => 
+    trackEvent('Social Media Follow', { platform }),
+};
+
+// Referral tracking
+export const trackReferral = (source: string, medium: string, campaign?: string) => {
+  trackEvent('Referral Traffic', { 
+    source, 
+    medium, 
+    campaign: campaign || 'unknown' 
+  });
+};
+
 // Custom hook for page view tracking
 export const usePageTracking = () => {
   useEffect(() => {
-    // Plausible automatically tracks page views, but we can add custom logic here
-    const handleRouteChange = () => {
-      // Custom page tracking logic if needed
-    };
+    // Track referral source
+    if (typeof window !== 'undefined') {
+      const urlParams = new URLSearchParams(window.location.search);
+      const utmSource = urlParams.get('utm_source');
+      const utmMedium = urlParams.get('utm_medium');
+      const utmCampaign = urlParams.get('utm_campaign');
+      
+      if (utmSource) {
+        trackReferral(utmSource, utmMedium || 'unknown', utmCampaign || undefined);
+      }
+      
+      // Track LinkedIn-specific parameters
+      if (utmSource === 'linkedin') {
+        trackLinkedInEvents.postImpression();
+      }
+    }
 
     // Track initial page load
     trackEvent('Page View');
