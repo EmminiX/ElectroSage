@@ -101,22 +101,91 @@ export const trackReferral = (source: string, medium: string, campaign?: string)
   });
 };
 
-// Debug function to check if Plausible is loaded
+// Enhanced debug function for production debugging
 export const debugPlausible = () => {
   if (typeof window !== 'undefined') {
-    console.log('Plausible Debug Info:');
-    console.log('- Domain:', window.location.hostname);
+    console.log('🔍 Plausible Debug Info:');
+    console.log('- Current domain:', window.location.hostname);
+    console.log('- Full URL:', window.location.href);
     console.log('- Plausible function available:', typeof window.plausible);
     console.log('- Expected domain: electrosage.emmi.zone');
     
+    // Check script element
+    const script = document.querySelector('[data-domain="electrosage.emmi.zone"]');
+    console.log('- Script element found:', !!script);
+    if (script) {
+      console.log('- Script src:', script.getAttribute('src'));
+      console.log('- Script loaded:', script.getAttribute('data-loaded') || 'unknown');
+      console.log('- Script defer:', script.hasAttribute('defer'));
+    }
+
+    // Check network requests
+    console.log('🌐 Network Analysis:');
+    console.log('- Testing Plausible script accessibility...');
+    
+    // Test script accessibility
+    fetch('https://plausible.emmi.zone/js/script.js')
+      .then(response => {
+        console.log('- Plausible script response status:', response.status);
+        console.log('- Plausible script headers:', Object.fromEntries(response.headers.entries()));
+        return response.text();
+      })
+      .then(scriptContent => {
+        console.log('- Script content length:', scriptContent.length);
+        console.log('- Script contains plausible function:', scriptContent.includes('plausible'));
+      })
+      .catch(error => {
+        console.error('❌ Failed to fetch Plausible script:', error);
+      });
+
+    // Test API endpoint
+    fetch('https://plausible.emmi.zone/api/event', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        name: 'test-connection',
+        url: window.location.href,
+        domain: 'electrosage.emmi.zone'
+      })
+    })
+    .then(response => {
+      console.log('- API endpoint response:', response.status);
+      if (response.status === 202) {
+        console.log('✅ API endpoint is working');
+      } else {
+        console.log('⚠️ API endpoint returned:', response.status);
+      }
+    })
+    .catch(error => {
+      console.error('❌ API endpoint test failed:', error);
+    });
+    
     if (window.plausible) {
       console.log('✅ Plausible is loaded and ready');
-      window.plausible('test-event', { props: { debug: true } });
+      try {
+        window.plausible('debug-test', { props: { timestamp: Date.now() } });
+        console.log('✅ Test event sent successfully');
+      } catch (error) {
+        console.error('❌ Failed to send test event:', error);
+      }
     } else {
-      console.log('❌ Plausible not found - checking script loading...');
-      const script = document.querySelector('[data-domain="electrosage.emmi.zone"]');
-      console.log('- Script element found:', !!script);
-      console.log('- Script src:', script?.getAttribute('src'));
+      console.log('❌ Plausible function not available');
+      
+      // Try to manually check if script has loaded
+      setTimeout(() => {
+        if (window.plausible) {
+          console.log('✅ Plausible loaded after delay');
+        } else {
+          console.log('❌ Plausible still not available after 2s delay');
+          console.log('🔧 Troubleshooting suggestions:');
+          console.log('1. Check if electrosage.emmi.zone is configured in Plausible dashboard');
+          console.log('2. Verify CORS settings on plausible.emmi.zone');
+          console.log('3. Check if domain whitelist includes electrosage.emmi.zone');
+          console.log('4. Verify script.js is accessible from production domain');
+        }
+      }, 2000);
     }
   }
 };
