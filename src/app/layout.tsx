@@ -128,7 +128,7 @@ export default function RootLayout({
     <html lang="en" data-oid="pcldwnh">
       <head data-oid="._oblg9">
         {/* Fonts are loaded in _document.tsx */}
-        <link rel="manifest" href="/manifest.json" />
+        <link rel="manifest" href="/manifest.json?v=2" />
         <link rel="icon" href="/favicon.ico" />
         <link rel="apple-touch-icon" sizes="180x180" href="/icons/apple-touch-icon.png" />
         <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png" />
