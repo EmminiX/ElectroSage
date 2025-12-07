@@ -48,7 +48,7 @@ This security audit identified and resolved **5 vulnerabilities** across various
 
 ### 5. Low: @eslint/plugin-kit Regular Expression Denial of Service (ReDoS)
 - **Package:** @eslint/plugin-kit
-- **Version:** 0.3.3 → 0.3.5
+- **Version:** 0.3.3 → 0.4.1
 - **CVE:** GHSA-xffm-g5w8-qvg7
 - **Severity:** Low
 - **Description:** Vulnerable to ReDoS attacks through ConfigCommentParser
@@ -63,7 +63,7 @@ The following packages were updated to patch security vulnerabilities:
 - glob: 10.4.5 → 10.5.0
 - js-yaml: 4.1.0 → 4.1.1
 - mdast-util-to-hast: 13.2.0 → 13.2.1
-- @eslint/plugin-kit: 0.3.3 → 0.3.5
+- @eslint/plugin-kit: 0.3.3 → 0.4.1
 
 ### Additional Package Updates (npm update)
 The following packages were updated to their latest safe versions within their semver range:
