@@ -1,10 +1,6 @@
 services:
   electrosage:
-    build:
-      context: .
-      args:
-        OPENAI_API_KEY: ${OPENAI_API_KEY}
-    image: electrosage:local
+    image: ghcr.io/emminix/electrosage:latest
     container_name: electrosage-academy
     restart: unless-stopped
     security_opt:
@@ -27,6 +23,7 @@ services:
       start_period: 40s
     labels:
       - "traefik.enable=true"
+      - "traefik.docker.network=traefik-proxy"
       # HTTPS router
       - "traefik.http.routers.electrosage.rule=Host(`electrosage.emmi.zone`)"
       - "traefik.http.routers.electrosage.entrypoints=websecure"
