@@ -1,26 +1,44 @@
-version: '3.8'
-
 services:
-  app:
-    build: 
+  electrosage:
+    build:
       context: .
       args:
         OPENAI_API_KEY: ${OPENAI_API_KEY}
-    ports:
-      - "4100:4100"
+    image: electrosage:local
+    container_name: electrosage-academy
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
     environment:
       - NODE_ENV=production
       - PORT=4100
       - HOSTNAME=0.0.0.0
     env_file:
       - .env.local
-    restart: unless-stopped
-    container_name: electrosage-academy
+    expose:
+      - "4100"
+    networks:
+      - traefik-proxy
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:4100"]
+      test: ["CMD", "node", "--version"]
       interval: 30s
       timeout: 10s
       retries: 3
+      start_period: 40s
     labels:
-      - "traefik.enable=false"
-      - "project.info=ElectroSage Academy - Access at http://localhost:4100"
+      - "traefik.enable=true"
+      # HTTPS router
+      - "traefik.http.routers.electrosage.rule=Host(`electrosage.emmi.zone`)"
+      - "traefik.http.routers.electrosage.entrypoints=websecure"
+      - "traefik.http.routers.electrosage.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.electrosage.service=electrosage"
+      - "traefik.http.services.electrosage.loadbalancer.server.port=4100"
+      # HTTP to HTTPS redirect
+      - "traefik.http.middlewares.electrosage-redirect.redirectscheme.scheme=https"
+      - "traefik.http.routers.electrosage-http.rule=Host(`electrosage.emmi.zone`)"
+      - "traefik.http.routers.electrosage-http.entrypoints=web"
+      - "traefik.http.routers.electrosage-http.middlewares=electrosage-redirect"
+
+networks:
+  traefik-proxy:
+    external: true

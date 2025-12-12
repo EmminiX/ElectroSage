@@ -135,11 +135,10 @@ export default function RootLayout({
         <link rel="icon" type="image/png" sizes="16x16" href="/icons/favicon-16x16.png" />
         <meta name="msapplication-TileColor" content="#0284c7" />
         <meta name="theme-color" content="#0284c7" />
-        <script 
-          defer 
-          data-domain="electrosage.emmi.zone" 
-          src="https://plausible.emmi.zone/js/script.js"
-          data-api="https://plausible.emmi.zone/api/event"
+        <script
+          src="https://rybbit.emmi.zone/api/script.js"
+          data-site-id="9b2d6d83c6cd"
+          defer
         ></script>
       </head>
       <body className="antialiased bg-gray-50 animations-enabled" data-oid="7qpeq2m">
