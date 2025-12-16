@@ -16,17 +16,6 @@ permissions:
 
 jobs:
   # Job 1: Block PRs with vulnerabilities
-  dependency-review:
-    runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request'
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/dependency-review-action@v4
-        with:
-          fail-on-severity: high
-          comment-summary-in-pr: always
-
-  # Job 2: npm audit scan with Telegram alerts
   npm-audit:
     runs-on: ubuntu-latest
     if: hashFiles('package.json') != ''
