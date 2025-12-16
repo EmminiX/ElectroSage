@@ -1,17 +1,39 @@
 version: 2
 updates:
-  # For npm projects
+  # JavaScript/TypeScript dependencies
   - package-ecosystem: "npm"
     directory: "/"
     schedule:
       interval: "daily"
       time: "06:00"
     open-pull-requests-limit: 10
+    groups:
+      # Group patch updates for auto-merge
+      patch-updates:
+        patterns:
+          - "*"
+        update-types:
+          - "patch"
+      # Group minor updates
+      minor-updates:
+        patterns:
+          - "*"
+        update-types:
+          - "minor"
     labels:
       - "dependencies"
       - "security"
 
-  # For Docker projects
+  # GitHub Actions
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    labels:
+      - "dependencies"
+      - "github-actions"
+
+  # Docker
   - package-ecosystem: "docker"
     directory: "/"
     schedule:
@@ -19,12 +41,3 @@ updates:
     labels:
       - "dependencies"
       - "docker"
-
-  # For GitHub Actions
-  - package-ecosystem: "github-actions"
-    directory: "/"
-    schedule:
-      interval: "weekly"
-    labels:
-      - "dependencies"
-      - "ci"
