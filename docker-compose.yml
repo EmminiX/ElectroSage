@@ -28,6 +28,7 @@ services:
       - "traefik.http.routers.electrosage.rule=Host(`electrosage.emmi.zone`)"
       - "traefik.http.routers.electrosage.entrypoints=websecure"
       - "traefik.http.routers.electrosage.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.electrosage.middlewares=full-protection@file"
       - "traefik.http.routers.electrosage.service=electrosage"
       - "traefik.http.services.electrosage.loadbalancer.server.port=4100"
       # HTTP to HTTPS redirect
