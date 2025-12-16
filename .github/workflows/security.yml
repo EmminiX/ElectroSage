@@ -21,7 +21,7 @@ jobs:
     outputs:
       has-package-json: ${{ steps.check.outputs.has-package-json }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Check for package.json
         id: check
         run: |
@@ -37,7 +37,7 @@ jobs:
     needs: check-setup
     if: needs.check-setup.outputs.has-package-json == 'true'
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - uses: actions/setup-node@v4
         with:
@@ -98,7 +98,7 @@ jobs:
     needs: check-setup
     if: needs.check-setup.outputs.has-package-json == 'true'
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Check for critical CVEs
         id: cve
@@ -186,7 +186,7 @@ jobs:
   trivy-scan:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@0.28.0
