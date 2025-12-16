@@ -46,7 +46,7 @@ jobs:
 
       # Send success notification (optional)
       - name: Notify Telegram - Success
-        if: success() && vars.TELEGRAM_BOT_TOKEN != ''
+        if: success() && secrets.TELEGRAM_BOT_TOKEN != ''
         env:
           TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
@@ -72,7 +72,7 @@ jobs:
 
       # Send failure notification (optional)
       - name: Notify Telegram - Failure
-        if: failure() && vars.TELEGRAM_BOT_TOKEN != ''
+        if: failure() && secrets.TELEGRAM_BOT_TOKEN != ''
         env:
           TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
