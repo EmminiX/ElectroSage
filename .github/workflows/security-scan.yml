@@ -2,9 +2,9 @@ name: Security Vulnerability Scan
 
 on:
   push:
-    branches: [main]
+    branches: [main, master]
   pull_request:
-    branches: [main]
+    branches: [main, master]
   schedule:
     - cron: '0 6 * * *'  # Daily at 6 AM UTC
   workflow_dispatch:
@@ -16,6 +16,17 @@ permissions:
 
 jobs:
   # Job 1: Block PRs with vulnerabilities
+  dependency-review:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/dependency-review-action@v4
+        with:
+          fail-on-severity: high
+          comment-summary-in-pr: always
+
+  # Job 2: npm audit scan
   npm-audit:
     runs-on: ubuntu-latest
     if: hashFiles('package.json') != ''
@@ -47,31 +58,11 @@ jobs:
             echo "vulnerable=false" >> $GITHUB_OUTPUT
           fi
 
-      - name: Send Telegram Alert
-        if: steps.audit.outputs.vulnerable == 'true'
-        env:
-          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
-          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+      - name: Fail on critical vulnerabilities
+        if: steps.audit.outputs.critical != '0'
         run: |
-          MESSAGE="🚨 *SECURITY ALERT*
-
-          📦 Repository: \`${{ github.repository }}\`
-          🌿 Branch: \`${{ github.ref_name }}\`
-
-          *Vulnerabilities Found:*
-          🔴 Critical: ${{ steps.audit.outputs.critical }}
-          🟠 High: ${{ steps.audit.outputs.high }}
-
-          [View Details](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})"
-
-          curl -s -X POST "https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage" \
-            -d chat_id="${TELEGRAM_CHAT_ID}" \
-            -d parse_mode="Markdown" \
-            -d text="${MESSAGE}"
-
-      - name: Fail on critical
-        if: steps.audit.outputs.critical > 0
-        run: exit 1
+          echo "❌ Found ${{ steps.audit.outputs.critical }} critical vulnerabilities"
+          exit 1
 
   # Job 3: Check for React2Shell and Next.js CVEs
   critical-cve-check:
@@ -132,32 +123,12 @@ jobs:
           echo "vulnerable=$VULNERABLE" >> $GITHUB_OUTPUT
           echo "messages=$MESSAGES" >> $GITHUB_OUTPUT
 
-      - name: Send Critical CVE Alert
-        if: steps.cve.outputs.vulnerable == 'true'
-        env:
-          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
-          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-        run: |
-          MESSAGE="🔴🔴🔴 *CRITICAL CVE DETECTED* 🔴🔴🔴
-
-          📦 Repository: \`${{ github.repository }}\`
-
-          ${{ steps.cve.outputs.messages }}
-
-          ⚠️ *IMMEDIATE ACTION REQUIRED*
-          • Update dependencies NOW
-          • Rotate environment secrets
-
-          [View Details](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})"
-
-          curl -s -X POST "https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage" \
-            -d chat_id="${TELEGRAM_CHAT_ID}" \
-            -d parse_mode="Markdown" \
-            -d text="${MESSAGE}"
-
       - name: Fail on critical CVE
         if: steps.cve.outputs.vulnerable == 'true'
-        run: exit 1
+        run: |
+          echo "🔴 Critical CVE detected!"
+          echo "${{ steps.cve.outputs.messages }}"
+          exit 1
 
   # Job 4: Trivy deep scan
   trivy-scan:
@@ -165,7 +136,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Run Trivy
+      - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@0.28.0
         with:
           scan-type: 'fs'
@@ -174,31 +145,22 @@ jobs:
           format: 'sarif'
           output: 'trivy-results.sarif'
 
-      - name: Upload results
+      - name: Upload Trivy results to GitHub Security
         uses: github/codeql-action/upload-sarif@v3
         if: always()
         with:
           sarif_file: 'trivy-results.sarif'
 
-  # Job 5: Daily scan notification (only on schedule)
+  # Job 5: Daily scan summary
   daily-summary:
     runs-on: ubuntu-latest
     needs: [npm-audit, critical-cve-check, trivy-scan]
     if: github.event_name == 'schedule' && success()
     steps:
-      - name: Send daily OK
-        env:
-          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
-          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+      - name: Create summary
         run: |
-          MESSAGE="✅ *Daily Security Scan Complete*
-
-          📦 Repository: \`${{ github.repository }}\`
-          🕐 Time: $(date -u '+%Y-%m-%d %H:%M UTC')
-
-          No critical vulnerabilities found."
-
-          curl -s -X POST "https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage" \
-            -d chat_id="${TELEGRAM_CHAT_ID}" \
-            -d parse_mode="Markdown" \
-            -d text="${MESSAGE}"
+          echo "✅ Daily security scan completed successfully" >> $GITHUB_STEP_SUMMARY
+          echo "No critical vulnerabilities found." >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Repository:** ${{ github.repository }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Time:** $(date -u '+%Y-%m-%d %H:%M UTC')" >> $GITHUB_STEP_SUMMARY
