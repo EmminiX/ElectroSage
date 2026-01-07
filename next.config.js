@@ -2,12 +2,12 @@
 const nextConfig = {
   // Enable strict mode for better performance and debugging
   reactStrictMode: true,
-  
+
   // Optimize images
   images: {
     formats: ['image/webp', 'image/avif'],
   },
-  
+
   // Security headers
   async headers() {
     return [
@@ -28,28 +28,24 @@ const nextConfig = {
           },
           {
             key: 'Permissions-Policy',
-            value: 'camera=(), microphone=(), geolocation=()',
+            value: 'camera=(), microphone=(self), geolocation=()',
           },
         ],
       },
     ];
   },
-  
-  // Enable standalone output for Docker
-  output: 'standalone',
-  
+
   // Experimental features for better performance
   experimental: {
     optimizeCss: true,
   },
-  
-  // Only ignore build errors in development
+
+  // TypeScript configuration
   typescript: {
-    ignoreBuildErrors: process.env.NODE_ENV === 'development',
-  },
-  eslint: {
-    ignoreDuringBuilds: process.env.NODE_ENV === 'development',
+    // Allow builds to complete even with TypeScript errors for faster iteration
+    ignoreBuildErrors: false,
   },
 }
 
 module.exports = nextConfig
+

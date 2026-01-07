@@ -2,8 +2,7 @@ import type { Metadata } from "next";
 import "@/styles/globals.css";
 import ClientLayout from "@/components/layout/ClientLayout";
 import StructuredData from "@/components/StructuredData";
-import Analytics from "@/components/Analytics";
-import { PlausibleDevDebug } from "@/components/PlausibleDebug";
+
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://electrosage.emmi.zone"),
@@ -135,16 +134,9 @@ export default function RootLayout({
         <link rel="icon" type="image/png" sizes="16x16" href="/icons/favicon-16x16.png" />
         <meta name="msapplication-TileColor" content="#0284c7" />
         <meta name="theme-color" content="#0284c7" />
-        <script
-          src="https://rybbit.emmi.zone/api/script.js"
-          data-site-id="9b2d6d83c6cd"
-          defer
-        ></script>
       </head>
       <body className="antialiased bg-gray-50 animations-enabled" data-oid="7qpeq2m">
         <StructuredData />
-        <Analytics />
-        <PlausibleDevDebug />
         <a href="#main" className="skip-link" data-oid="d5ntef0">
           Skip to main content
         </a>

@@ -1,7 +1,6 @@
 'use client';
 
 import { Coffee, Heart } from 'lucide-react';
-import { trackSocialMedia } from '@/components/Analytics';
 
 interface BuyMeACoffeeProps {
   variant?: 'default' | 'compact' | 'icon' | 'footer';
@@ -10,7 +9,6 @@ interface BuyMeACoffeeProps {
 
 export default function BuyMeACoffee({ variant = 'default', className = '' }: BuyMeACoffeeProps) {
   const handleClick = () => {
-    trackSocialMedia.click('buymeacoffee', 'support-button');
     window.open('https://buymeacoffee.com/emmix', '_blank', 'noopener,noreferrer');
   };
 
@@ -82,10 +80,10 @@ export function FloatingBuyMeACoffee() {
             <div className="absolute top-full right-4 border-l-4 border-r-4 border-t-4 border-transparent border-t-gray-900"></div>
           </div>
         </div>
-        
+
         {/* Button */}
-        <BuyMeACoffee 
-          variant="default" 
+        <BuyMeACoffee
+          variant="default"
           className="shadow-2xl hover:shadow-yellow-400/20 animate-pulse hover:animate-none"
         />
       </div>
@@ -96,7 +94,6 @@ export function FloatingBuyMeACoffee() {
 // Inline text variant for content areas
 export function InlineBuyMeACoffee() {
   const handleClick = () => {
-    trackSocialMedia.click('buymeacoffee', 'inline-link');
     window.open('https://buymeacoffee.com/emmix', '_blank', 'noopener,noreferrer');
   };
 

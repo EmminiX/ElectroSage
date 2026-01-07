@@ -11,7 +11,7 @@ import AutoHideFooter from "@/components/layout/AutoHideFooter";
 import { ContentProvider, useContent } from "@/contexts/ContentContext";
 import { useProgress } from "@/contexts/ProgressContext";
 import { useKeyboardNavigation } from "@/hooks/useKeyboardNavigation";
-import ProductionAnalyticsTest from "@/components/ProductionAnalyticsTest";
+
 
 
 function MainPageContent() {
@@ -124,9 +124,6 @@ function MainPageContent() {
 
       {/* Auto-Hide Footer */}
       <AutoHideFooter />
-      
-      {/* Analytics Test Panel (only visible on localhost or when explicitly shown) */}
-      <ProductionAnalyticsTest />
     </div>
   );
 }
