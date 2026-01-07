@@ -34,7 +34,7 @@ export async function POST(request: NextRequest) {
 
     // Use RAG system to get relevant content
     const ragResult = getRelevantContent(message, 3);
-    
+
     // Get current section content if provided
     let currentSectionContent = '';
     if (context && typeof context === 'string') {
@@ -43,9 +43,9 @@ export async function POST(request: NextRequest) {
 
     // Generate contextual prompt with RAG content
     const systemPrompt = generateContextualPrompt(
-      message, 
-      context, 
-      ragResult.relevantContent || currentSectionContent, 
+      message,
+      context,
+      ragResult.relevantContent || currentSectionContent,
       messages
     );
 
@@ -77,7 +77,7 @@ export async function POST(request: NextRequest) {
     const completion = await openai.chat.completions.create({
       model: MODEL,
       messages: conversationMessages,
-      max_tokens: MAX_TOKENS,
+      max_completion_tokens: MAX_TOKENS,
       temperature: TEMPERATURE,
       stream: false,
     });
@@ -88,14 +88,14 @@ export async function POST(request: NextRequest) {
       throw new Error('No response from OpenAI');
     }
 
-    return NextResponse.json({ 
+    return NextResponse.json({
       message: assistantResponse,
-      usage: completion.usage 
+      usage: completion.usage
     });
 
   } catch (error: any) {
     console.error('Error processing chat message:', error);
-    
+
     // Handle specific OpenAI errors
     if (error?.error?.type === 'insufficient_quota') {
       return NextResponse.json(
@@ -103,7 +103,7 @@ export async function POST(request: NextRequest) {
         { status: 429 }
       );
     }
-    
+
     if (error?.error?.type === 'invalid_api_key') {
       return NextResponse.json(
         { error: 'Invalid OpenAI API key' },
