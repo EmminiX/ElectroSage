@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Analytics } from "@vercel/analytics/next";
 import "@/styles/globals.css";
 import ClientLayout from "@/components/layout/ClientLayout";
 import StructuredData from "@/components/StructuredData";
@@ -141,6 +142,7 @@ export default function RootLayout({
           Skip to main content
         </a>
         <ClientLayout data-oid="s62qade">{children}</ClientLayout>
+        <Analytics />
       </body>
     </html>
   );
