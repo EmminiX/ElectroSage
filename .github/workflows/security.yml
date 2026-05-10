@@ -65,7 +65,7 @@ jobs:
           fi
 
       - name: Send Telegram Alert (optional)
-        if: steps.audit.outputs.vulnerable == 'true' && vars.TELEGRAM_BOT_TOKEN != ''
+        if: steps.audit.outputs.vulnerable == 'true' && secrets.TELEGRAM_BOT_TOKEN != '' && secrets.TELEGRAM_CHAT_ID != ''
         env:
           TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
@@ -153,7 +153,7 @@ jobs:
           echo "messages=$MESSAGES" >> $GITHUB_OUTPUT
 
       - name: Send Critical CVE Alert (optional)
-        if: steps.cve.outputs.vulnerable == 'true' && vars.TELEGRAM_BOT_TOKEN != ''
+        if: steps.cve.outputs.vulnerable == 'true' && secrets.TELEGRAM_BOT_TOKEN != '' && secrets.TELEGRAM_CHAT_ID != ''
         env:
           TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
@@ -203,7 +203,7 @@ jobs:
     if: github.event_name == 'schedule' && success()
     steps:
       - name: Send daily OK notification (optional)
-        if: vars.TELEGRAM_BOT_TOKEN != ''
+        if: secrets.TELEGRAM_BOT_TOKEN != '' && secrets.TELEGRAM_CHAT_ID != ''
         env:
           TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
