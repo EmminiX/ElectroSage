@@ -65,7 +65,7 @@ jobs:
           fi
 
       - name: Send Telegram Alert (optional)
-        if: steps.audit.outputs.vulnerable == 'true' && secrets.TELEGRAM_BOT_TOKEN != '' && secrets.TELEGRAM_CHAT_ID != ''
+        if: steps.audit.outputs.vulnerable == 'true'
         env:
           TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
@@ -81,10 +81,14 @@ jobs:
 
           [View Details](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})"
 
-          curl -s -X POST "https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage" \
-            -d chat_id="${TELEGRAM_CHAT_ID}" \
-            -d parse_mode="Markdown" \
-            -d text="${MESSAGE}" || echo "Telegram notification failed (token not configured)"
+          if [ -n "${TELEGRAM_TOKEN}" ] && [ -n "${TELEGRAM_CHAT_ID}" ]; then
+            curl -s -X POST "https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage" \
+              -d chat_id="${TELEGRAM_CHAT_ID}" \
+              -d parse_mode="Markdown" \
+              -d text="${MESSAGE}" || echo "Telegram notification failed"
+          else
+            echo "Telegram notification skipped (token/chat ID not configured)"
+          fi
 
       - name: Fail on critical vulnerabilities
         if: steps.audit.outputs.critical != '0'
@@ -153,7 +157,7 @@ jobs:
           echo "messages=$MESSAGES" >> $GITHUB_OUTPUT
 
       - name: Send Critical CVE Alert (optional)
-        if: steps.cve.outputs.vulnerable == 'true' && secrets.TELEGRAM_BOT_TOKEN != '' && secrets.TELEGRAM_CHAT_ID != ''
+        if: steps.cve.outputs.vulnerable == 'true'
         env:
           TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
@@ -170,10 +174,14 @@ jobs:
 
           [View Details](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})"
 
-          curl -s -X POST "https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage" \
-            -d chat_id="${TELEGRAM_CHAT_ID}" \
-            -d parse_mode="Markdown" \
-            -d text="${MESSAGE}" || echo "Telegram notification failed"
+          if [ -n "${TELEGRAM_TOKEN}" ] && [ -n "${TELEGRAM_CHAT_ID}" ]; then
+            curl -s -X POST "https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage" \
+              -d chat_id="${TELEGRAM_CHAT_ID}" \
+              -d parse_mode="Markdown" \
+              -d text="${MESSAGE}" || echo "Telegram notification failed"
+          else
+            echo "Telegram notification skipped (token/chat ID not configured)"
+          fi
 
       - name: Fail on critical CVE
         if: steps.cve.outputs.vulnerable == 'true'
@@ -203,7 +211,6 @@ jobs:
     if: github.event_name == 'schedule' && success()
     steps:
       - name: Send daily OK notification (optional)
-        if: secrets.TELEGRAM_BOT_TOKEN != '' && secrets.TELEGRAM_CHAT_ID != ''
         env:
           TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
@@ -215,7 +222,11 @@ jobs:
 
           No critical vulnerabilities found."
 
-          curl -s -X POST "https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage" \
-            -d chat_id="${TELEGRAM_CHAT_ID}" \
-            -d parse_mode="Markdown" \
-            -d text="${MESSAGE}" || echo "Telegram notification skipped"
+          if [ -n "${TELEGRAM_TOKEN}" ] && [ -n "${TELEGRAM_CHAT_ID}" ]; then
+            curl -s -X POST "https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage" \
+              -d chat_id="${TELEGRAM_CHAT_ID}" \
+              -d parse_mode="Markdown" \
+              -d text="${MESSAGE}" || echo "Telegram notification failed"
+          else
+            echo "Telegram notification skipped (token/chat ID not configured)"
+          fi
