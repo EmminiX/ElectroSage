@@ -8,7 +8,7 @@ updates:
       time: "06:00"
     open-pull-requests-limit: 10
     groups:
-      # Group patch updates for auto-merge
+      # Group patch updates together for auto-merge
       patch-updates:
         patterns:
           - "*"
